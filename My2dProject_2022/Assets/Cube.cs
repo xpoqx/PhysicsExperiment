@@ -20,7 +20,7 @@ public class Cube : MonoBehaviour
 
     public void Init()
     {
-        AccelSpeed = 2f;
+        AccelSpeed = 8f;
         Speed = Time.deltaTime*AccelSpeed;
         gravitySpeed = Speed;
     }
@@ -72,15 +72,31 @@ public class Cube : MonoBehaviour
 
     private void MoveInput()
     {
-        horizontalMove = 0;
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (isLandingOnGround)
         {
-            horizontalMove += (-1-horizontalMove)/2f;
+            if (horizontalMove > 0.01f)
+            {
+                horizontalMove -= Speed;
+            }
+            else if (horizontalMove < -0.01f)
+            {
+                horizontalMove += Speed;
+            }
+            else
+            {
+                horizontalMove = 0;
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                horizontalMove += (-1-horizontalMove)/5f;
+            }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                horizontalMove += (1-horizontalMove)/5f;
+            }
         }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            horizontalMove += (1-horizontalMove)/2f;
-        }
+        
+        
         if (Input.GetKey(KeyCode.UpArrow) && isLandingOnGround)
         {
             gravitySpeed = -4/144f;
@@ -90,7 +106,7 @@ public class Cube : MonoBehaviour
 
     private void MoveCalculate()
     {
-        float horSpeed = horizontalMove * Time.deltaTime * 5f;
+        float horSpeed = horizontalMove * Time.deltaTime * 4f;
         transform.Translate(Vector3.right * horSpeed);
         Gravity();
     }
