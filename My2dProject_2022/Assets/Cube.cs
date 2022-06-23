@@ -12,6 +12,7 @@ public class Cube : MonoBehaviour
     public bool isLandingOnGround;
     private int switchDirection;
     private float horizontalMove;
+    private bool isMovingHorizon;
     
     
 
@@ -72,35 +73,75 @@ public class Cube : MonoBehaviour
 
     private void MoveInput()
     {
+        isMovingHorizon = false;
         if (isLandingOnGround)
         {
-            if (horizontalMove > 0.01f)
-            {
-                horizontalMove -= Speed;
-            }
-            else if (horizontalMove < -0.01f)
-            {
-                horizontalMove += Speed;
-            }
-            else
-            {
-                horizontalMove = 0;
-            }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 horizontalMove += (-1-horizontalMove)/5f;
+                isMovingHorizon = true;
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 horizontalMove += (1-horizontalMove)/5f;
+                isMovingHorizon = true;
+            }
+            if (!isMovingHorizon)
+            {
+                if (horizontalMove > 0.01f)
+                {
+                    horizontalMove -= Speed;
+                }
+                else if (horizontalMove < -0.01f)
+                {
+                    horizontalMove += Speed;
+                }
+                else
+                {
+                    horizontalMove = 0;
+                }
+            }
+        }
+        else
+        {
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                horizontalMove += (-1-horizontalMove)/150f;
+                isMovingHorizon = true;
+            }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                horizontalMove += (1-horizontalMove)/150f;
+                isMovingHorizon = true;
+            }
+            if(!isMovingHorizon)
+            {
+                if (horizontalMove > 0.01f)
+                {
+                    horizontalMove -= Speed/10f;
+                }
+                else if (horizontalMove < -0.01f)
+                {
+                    horizontalMove += Speed/10f;
+                }
+                else
+                {
+                    horizontalMove = 0;
+                }
             }
         }
         
-        
-        if (Input.GetKey(KeyCode.UpArrow) && isLandingOnGround)
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            gravitySpeed = -4/144f;
-            isLandingOnGround = false;
+            if (isLandingOnGround)
+            {
+                gravitySpeed = -4/144f;
+                isLandingOnGround = false;
+            }
+            else
+            {
+                
+            }
         }
     }
 
@@ -116,25 +157,4 @@ public class Cube : MonoBehaviour
         
     }
     
-    private void Default()
-    {
-            float speed = Time.deltaTime * Speed;
-            if (switchDirection == 0)
-            {
-                transform.Translate(-speed,0,0);
-            }
-            else if (switchDirection == 1)
-            {
-                transform.Translate(0,-speed,0);
-            }
-            else if (switchDirection == 2)
-            {
-                transform.Translate(-speed,0,0);
-            }
-    }
-
-    private void PlusSwitch()
-    {
-        switchDirection++;
-    }
 }
